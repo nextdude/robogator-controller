@@ -68,7 +68,7 @@ html, body {
       -ms-flex-positive: 1;
           flex-grow: 1;
 }
-.kcg-navigation .mdl-navigation {
+.kgc-navigation {
   padding-top: 0 !important;
 }
 .kgc-layout .kgc-navigation .mdl-navigation__link {
@@ -208,4 +208,10 @@ _:-ms-input-placeholder, :root .kgc-graph {
 }
 .mdl-layout-title {
   font-size: 40px;
+}
+
+#home {
+  background: url('robogator-diagram.png') no-repeat center;
+  background-size: contain;
+  min-height: 600px;
 }
