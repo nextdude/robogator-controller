@@ -1,0 +1,211 @@
+/**
+ * Based on material design lite dashboard demo at https://getmdl.io/templates/dashboard/index.html
+ */
+
+html, body {
+  font-family: 'Roboto', 'Helvetica', sans-serif;
+}
+.kgc-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 24px;
+}
+.kgc-layout .mdl-layout__header .mdl-layout__drawer-button {
+  color: rgba(0, 0, 0, 0.54);
+}
+.mdl-layout__drawer .avatar {
+  margin-bottom: 16px;
+}
+.kgc-drawer {
+  border: none;
+}
+/* iOS Safari specific workaround */
+.kgc-drawer .mdl-menu__container {
+  z-index: -1;
+}
+.kgc-drawer .kgc-navigation {
+  z-index: -2;
+}
+/* END iOS Safari specific workaround */
+.kgc-drawer .mdl-menu .mdl-menu__item {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+.kgc-drawer-header {
+  box-sizing: border-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-justify-content: flex-end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+  padding: 0;
+  height: 200px;
+}
+.kgc-avatar-dropdown {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  position: relative;
+  -webkit-flex-direction: row;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 100%;
+}
+
+.kgc-navigation {
+  -webkit-flex-grow: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+}
+.kcg-navigation .mdl-navigation {
+  padding-top: 0 !important;
+}
+.kgc-layout .kgc-navigation .mdl-navigation__link {
+  display: -webkit-flex !important;
+  display: -ms-flexbox !important;
+  display: flex !important;
+  -webkit-flex-direction: row;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  color: rgba(255, 255, 255, 0.56);
+  font-weight: 500;
+  font-size: 28px;
+  line-height: 36px;
+}
+.kgc-layout .kgc-navigation .mdl-navigation__link:hover {
+  background-color: #00BCD4;
+  color: #37474F;
+}
+.kgc-navigation .mdl-navigation__link .material-icons {
+  font-size: 24px;
+  color: rgba(255, 255, 255, 0.56);
+  margin-right: 32px;
+}
+
+.kgc-content {
+  max-width: 1080px;
+}
+
+.kgc-charts {
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+.kgc-chart:nth-child(1) {
+  color: #ACEC00;
+}
+.kgc-chart:nth-child(2) {
+  color: #00BBD6;
+}
+.kgc-chart:nth-child(3) {
+  color: #BA65C9;
+}
+.kgc-chart:nth-child(4) {
+  color: #EF3C79;
+}
+.kgc-graphs {
+  padding: 16px 32px;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-align-items: stretch;
+      -ms-flex-align: stretch;
+          align-items: stretch;
+}
+/* TODO: Find a proper solution to have the graphs
+ * not float around outside their container in IE10/11.
+ * Using a browserhacks.com solution for now.
+ */
+_:-ms-input-placeholder, :root .kgc-graphs {
+  min-height: 664px;
+}
+_:-ms-input-placeholder, :root .kgc-graph {
+  max-height: 300px;
+}
+/* TODO end */
+.kgc-graph:nth-child(1) {
+  color: #00b9d8;
+}
+.kgc-graph:nth-child(2) {
+  color: #d9006e;
+}
+
+.kgc-cards {
+  -webkit-align-items: flex-start;
+      -ms-flex-align: start;
+          align-items: flex-start;
+  -webkit-align-content: flex-start;
+      -ms-flex-line-pack: start;
+          align-content: flex-start;
+}
+.kgc-cards .kgc-separator {
+  height: 32px;
+}
+.kgc-cards .mdl-card__title.mdl-card__title {
+  color: white;
+  font-size: 24px;
+  font-weight: 400;
+}
+.kgc-cards ul {
+  padding: 0;
+}
+.kgc-cards h3 {
+  font-size: 1em;
+}
+.kgc-updates .mdl-card__title {
+  min-height: 200px;
+  background-image: url('dog.png');
+  background-position: 90% 100%;
+  background-repeat: no-repeat;
+}
+.kgc-cards .mdl-card__actions a {
+  color: #00BCD4;
+  text-decoration: none;
+}
+
+.kgc-options h3 {
+  margin: 0;
+}
+.kgc-options .mdl-checkbox__box-outline {
+  border-color: rgba(255, 255, 255, 0.89);
+}
+.kgc-options ul {
+  margin: 0;
+  list-style-type: none;
+}
+.kgc-options li {
+  margin: 4px 0;
+}
+.kgc-options .material-icons {
+  color: rgba(255, 255, 255, 0.89);
+}
+.kgc-options .mdl-card__actions {
+  height: 64px;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  box-sizing: border-box;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+.mdl-layout-title {
+  font-size: 40px;
+}

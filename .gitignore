@@ -99,3 +99,10 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+# node
+node_modules
+
+# mdi
+/src/static/mdi
+
