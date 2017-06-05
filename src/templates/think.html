@@ -1,0 +1,24 @@
+{% extends "layout.html" %} {% block body %}
+
+<div id="think" class="kgc-content-box mdl-cell mdl-cell--12-col">
+  <div class="mdl-card">
+    <div class="mdl-card__title">
+      <h2 class="mdl-card__title-text">Make Robogator Think</h2>
+    </div>
+    <div class="mdl-card__supporting-text">
+      <ul>
+        <li><strong>Scenario</strong>: We will see a slow blinking light come on at the back of the robogator's “brain.”</li>
+        <li><strong>Motors</strong>: None</li>
+        <li><strong>Sensors</strong>: None</li>
+        <li><strong>How We Do It</strong>: We slowly set the value of the LED brightness from 0% to 100%, and then back down
+          to 0% again, pausing briefly in between.</li>
+      </ul>
+    </div>
+    <div class="mdl-card__actions">
+      <button id="think-start" class="kgc-start mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">Start</button>
+      <button id="think-stop" class="kgc-stop mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">Stop</button>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

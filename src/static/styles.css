@@ -210,6 +210,10 @@ _:-ms-input-placeholder, :root .kgc-graph {
   font-size: 40px;
 }
 
+.kcg-content-box {
+  font-size: 200%;
+}
+
 #home {
   background: url('robogator-diagram.png') no-repeat center;
   background-size: contain;

@@ -1,9 +1,28 @@
-{% extends "layout.html" %} 
-
-{% block body %}
+{% extends "layout.html" %} {% block body %}
 
 <div id="walk" class="kgc-content-box mdl-cell mdl-cell--12-col">
-WALK
+  <div class="mdl-card">
+    <div class="mdl-card__title">
+      <h2 class="mdl-card__title-text">Make Robogator Walk</h2>
+    </div>
+    <div class="mdl-card__supporting-text">
+      <ul>
+        <li><strong>Scenario</strong>: We will see the robogator move in all directions with awkward turns.</li>
+        <li><strong>Motors</strong>: Two back legs</li>
+        <li><strong>Sensors</strong>: None</li>
+        <li><strong>How We Do It</strong>: To move straight forward, we set the power to both back leg motors to -50%. 
+            To turn left we power the right leg motor to -50% and left motor to +50%. To turn right, we do the opposite.
+            This turning is awkward because the only way to turn is to use the two motors.</li>
+      </ul>
+    </div>
+    <div class="mdl-card__actions">
+      <button id="walk-start"    class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">Start</button>
+      <button id="walk-left"     class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">Turn Left</button>
+      <button id="walk-straight" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">Go Straight</button>
+      <button id="walk-right"    class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">Turn Right</button>
+      <button id="walk-stop"     class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">Stop</button>
+    </div>
+  </div>
 </div>
 
 {% endblock %}
