@@ -103,7 +103,7 @@
       }
       else if (id == "off-guard") {
         stopping = true;
-        kgcResult.innerHTML = '';
+        kgcResult.innerHTML = 'not on guard';
         sendMessage({
           actions: [
             ['set_sensor_type', sonicPort, 1],
