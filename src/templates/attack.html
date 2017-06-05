@@ -1,4 +1,4 @@
-{% extends "layout.html" %} {% block body %} {% extends "layout.html" %} {% block body %}
+{% extends "layout.html" %} {% block body %}
 
 <div id="attack" class="kgc-scenario kgc-content-box mdl-cell mdl-cell--12-col">
   <div class="mdl-card">
@@ -34,7 +34,10 @@
   var walkSpeed = -50;
   var openSpeed = 20;
   var closeSpeed = -50;
+  var legSpeed = 0;
+  var jawSpeed = 0;
   var jawTime = 0;
+  var stopping = false;
 
   function onOpen(evt) {
     console.log('connection ready', evt);
@@ -42,31 +45,37 @@
 
   function onMessage(data) {
     console.log(data);
-    if (data.result.values.length > 0) {
-      var distance = data.result.values[0];
-      console.log('distance', distance);
-      var legSpeed = 0;
-      var jawSpeed = 0;
-      if (distance < 62) {
-        if (distance > 31) {
-          legSpeed = walkSpeed;
-        }
-        else {
-          now = (new Date()).getTime();
-          if (now - jawTime > 500) {
-            jawSpeed = (jawSpeed < 0) ? openSpeed : closeSpeed;
-            jawTime = now;
+    if (!stopping) {
+      if (data.result.values.length > 0) {
+        var distance = data.result.values[0];
+        console.log('distance', distance);
+        if (distance < 62) {
+          if (distance > 31) {
+            legSpeed = walkSpeed;
+          }
+          else {
+            now = (new Date()).getTime();
+            if (now - jawTime > 1000) {
+              jawSpeed = (jawSpeed <= 0) ? openSpeed : closeSpeed;
+              jawTime = now;
+            }
           }
         }
+        sendMessage({
+          actions: [
+            ['set_motor_power', legs, legSpeed],
+            ['set_motor_power', jaws, jawSpeed],
+            ['sleep', 0.02],
+            ['get_sensor', sonicPort]
+          ]
+        });
       }
-      sendMessage({
-        actions: [
-          ['set_motor_power', legs, legSpeed],
-          ['set_motor_power', jaws, jawSpeed],
-          ['sleep', 0.02],
-          ['get_sensor', sonicPort]
-        ]
-      });
+    }
+    else {
+      console.log("stopping");
+      legSpeed = 0;
+      jawSpeed = 0;
+      jawTime = 0;
     }
   }
 
@@ -84,6 +93,7 @@
         });
       }
       else if (id == "off-guard") {
+        stopping = true;
         sendMessage({
           actions: [
             ['bp_reset_all']

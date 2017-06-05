@@ -28,6 +28,8 @@ def handle_actions(req):
             time.sleep(*args)
         elif method == 'set_motor_power':
             BP.set_motor_power(*args)
+        elif method == 'set_sensor_type':
+            BP.set_sensor_type(*args)
         elif method == 'get_sensor':
             try:
                 value = BP.get_sensor(*args)
