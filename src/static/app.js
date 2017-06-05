@@ -30,7 +30,7 @@
   }
 
   function openConnection() {
-    socket = new WebSocket(location.protocol + "//" + location.host + "/gator");
+    socket = new WebSocket("ws://" + location.host + "/gator");
     socket.onopen = onOpen;
     socket.onmessage = onMessage;
   }
@@ -40,7 +40,7 @@
   }
 
   function init() {
-    actions = getElementsByClassName('kgc-action-button');
+    actions = document.getElementsByClassName('kgc-action-button');
     for (var i = 0; i < actions.length; i++)
       actions[i].onclick = onActionButtonClick;
     if (actions.length > 0) {

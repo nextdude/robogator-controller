@@ -15,23 +15,29 @@ import json
 BP = brickpi3.BrickPi3()
 app = Flask(__name__)
 sockets = Sockets(app)
+action_scenario = None
 
 def init_scenario(scenario):
     err = None
+    active_scenario = scenario
     return err
 
+def handle_think_action(req):
+    
 def handle_scenario_action(req):
     res = { "status": "ok" }
     if req['action'] == 'stop':
         BP.reset_all()
         res['status'] = 'scenario-done'
-    if req['action'] == 'start':
+    elif req['action'] == 'start':
         err = init_scenario(req['scenario'])
         if err is not None:
-            res.status = "error"
-            res.error = err
+            res['status'] = "error"
+            res['error'] = err
         else:
-            res.status = 'scenario-ready'
+            res['status'] = 'scenario-ready'
+    elif req['scenario'] == 'think':
+        res = handle_think_action(req)
     return res
 
 @app.route("/")
