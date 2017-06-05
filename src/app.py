@@ -16,7 +16,7 @@ BP = brickpi3.BrickPi3()
 app = Flask(__name__)
 sockets = Sockets(app)
     
-def handle_action(req):
+def handle_actions(req):
     res = { "actions": req['actions'], "result": {"code": 0} }
     for action in req['actions']:
         method = action[0]
