@@ -61,6 +61,10 @@
             }
           }
         }
+        else {
+          legSpeed = 0
+          jawSpeed = 0
+        }
         sendMessage({
           actions: [
             ['set_motor_power', legs, legSpeed],
