@@ -228,3 +228,9 @@ _:-ms-input-placeholder, :root .kgc-graph {
   background-size: contain;
   min-height: 600px;
 }
+
+#kgc-result {
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align:center;
+}

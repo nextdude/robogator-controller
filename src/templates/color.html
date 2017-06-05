@@ -10,8 +10,9 @@
         <li><strong>Scenario</strong>: When Robogator senses darkness he stops. When he senses light he moves.</li>
         <li><strong>Motors</strong>: Both leg motors</li>
         <li><strong>Sensors</strong>: Color sensor</li>
-        <li><strong>How We Do It</strong>: When </li>
+        <li><strong>How We Do It</strong>: Robogator's color sensor can detect black, white, blue, green, yellow and red colors.</li>
       </ul>
+      <div id="kgc-result">inactive</div>
     </div>
     <div class="mdl-card__actions">
       <button id="activate" class="mdl-button mdl-js-button mdl-button--raised">Activate Color Sensor</button>
@@ -22,11 +23,12 @@
 
 <script>
   var legs = 0x01 + 0x08;
-  var colorPort = 0x04;
+  var colorPort = 0x02;
   var colorType = 12;
   var walkSpeed = -50;
   var colorNames = ["black", "blue", "green", "yellow", "red", "white"];
   var stopping = false;
+  var kgcResult = document.getElementById('kgc-result');
   
   function onOpen(evt) {
     console.log('connection ready', evt);
@@ -37,12 +39,14 @@
     if (data.result.values.length > 0) {
       if (!stopping) {
           var colors = data.result.values[0];
+          console.log('colors[0]',colors[0]);
           var color = 'white';
           if (colors.length == 5 && colors[0]>=1 && colors[0]<=6) {
             color = colorNames[colors[0] - 1];
           }
           console.log('color', color);
-          var legSpeed = color == 'black' ? walkSpeed : 0;
+          kgcResult.innerHTML = color == 'white' ? 'day' : 'night';
+          var legSpeed = color == 'white' ? walkSpeed : 0;
           sendMessage({
             actions: [
               ['set_motor_power', legs, legSpeed],
@@ -72,10 +76,11 @@
       }
       else if (id == "deactivate") {
         stopping = true;
+        kgcResult.innerHTML = 'inactive';
         sendMessage({
           actions: [
             ['set_sensor_type', colorPort, 1],
-            ['set_motor_speed', legs, 0],
+            ['set_motor_power', legs, 0],
             ['sleep', 0.02]
           ]
         });
