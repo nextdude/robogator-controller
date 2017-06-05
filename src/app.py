@@ -15,6 +15,7 @@ import json
 BP = brickpi3.BrickPi3()
 app = Flask(__name__)
 sockets = Sockets(app)
+active_scenario = None
 
 @app.route("/")
 def index():
@@ -24,12 +25,11 @@ def index():
 def gator(ws):
     while True:
         msg = ws.receive()
-        info = { "Incoming":msg, "Manufacturer":BP.get_manufacturer(), "Board":BP.get_board(), "Serial Number":BP.get_id(), "Hardware version":BP.get_version_hardware(), "Firmware version":BP.get_version_firmware(), "Battery voltage":BP.get_voltage_battery(), "9v voltage":BP.get_voltage_9v(), "5v voltage":BP.get_voltage_5v(), "3.3v voltage":BP.get_voltage_3v3() }
-        ws.send(json.dumps(info))
+        ws.send(json.dumps(msg))
 
 @app.route("/<section>")
 def show_section(section):
-    if section not in ['home','wink','walk','attack','color','jaws','help']:
+    if section not in ['home','think','walk','attack','color','jaws','help']:
         section = 'home'
     return render_template('{}.html'.format(section), section=section)
 
