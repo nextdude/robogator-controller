@@ -17,12 +17,15 @@ app = Flask(__name__)
 sockets = Sockets(app)
     
 def handle_action(req):
-    res = { "action": req['action'], "result": {"code": 0} }
-    action = req['action'][0]
-    args = req['action'][1:]
-    if action == 'set_led':
-        BP.set_led(args[0])
-        time.sleep(0.01)
+    res = { "actions": req['actions'], "result": {"code": 0} }
+    for action in req['actions']:
+        method = action[0]
+        args = action[1:]
+        if method == 'set_led':
+            BP.set_led(*args)
+            time.sleep(0.01)
+        elif method == 'set_motor_power':
+            BP.set_motor_power(*args)
     return res
 
 @app.route("/")
@@ -34,7 +37,7 @@ def index():
 def gator(ws):
     while True:
         req = json.loads(ws.receive())
-        res = handle_action(req)
+        res = handle_actions(req)
         ws.send(json.dumps(res))
 
 

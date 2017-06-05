@@ -32,7 +32,7 @@
 
   function onMessage(data) {
     if (data.result.code == 0) {
-      var level = data.action[1];
+      var level = data.actions[0][1];
       if (!stopping) {
         if (currentDirection == "up") {
           level = Math.max(level, currentLevel) + 1;
@@ -51,7 +51,7 @@
         currentLevel = level;
         console.log('set_led', currentLevel);
         sendMessage({
-          action: ['set_led', currentLevel]
+          actions: [['set_led', currentLevel]]
         });
       }
       else {
@@ -74,13 +74,13 @@
       var id = evt.target.id;
       if (id == "spin") {
         sendMessage({
-          action: ['set_led', 0]
+          actions: [['set_led', 0]]
         });
       }
       else if (id == "stop") {
         stopping = true;
         sendMessage({
-          action: ['set_led', -1]
+          actions: [['set_led', -1]]
         });
       }
     }

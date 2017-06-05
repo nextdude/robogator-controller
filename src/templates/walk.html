@@ -10,22 +10,66 @@
         <li><strong>Scenario</strong>: We will see the robogator move in all directions with awkward turns.</li>
         <li><strong>Motors</strong>: Two back legs</li>
         <li><strong>Sensors</strong>: None</li>
-        <li><strong>How We Do It</strong>: To move straight forward, we set the power to both back leg motors to -50%. 
-            To turn left we power the right leg motor to -50% and left motor to +50%. To turn right, we do the opposite.
-            This turning is awkward because the only way to turn is to use the two motors.</li>
+        <li><strong>How We Do It</strong>: To move straight forward, we set the power to both back leg motors to -50%. To turn
+          left we power the right leg motor to -50% and left motor to +50%. To turn right, we do the opposite. This turning
+          is awkward because the only way to turn is to use the two motors.</li>
       </ul>
     </div>
     <div class="mdl-card__actions">
       <button id="straight" class="mdl-button mdl-js-button mdl-button--raised">Go Straight</button>
-      <button id="left"     class="mdl-button mdl-js-button mdl-button--raised">Turn Left</button>
-      <button id="right"    class="mdl-button mdl-js-button mdl-button--raised">Turn Right</button>
-      <button id="stop"     class="mdl-button mdl-js-button mdl-button--raised">Stop</button>
+      <button id="left" class="mdl-button mdl-js-button mdl-button--raised">Turn Left</button>
+      <button id="right" class="mdl-button mdl-js-button mdl-button--raised">Turn Right</button>
+      <button id="stop" class="mdl-button mdl-js-button mdl-button--raised">Stop</button>
     </div>
   </div>
 </div>
 
 <script>
+  var portA = 0x01;
+  var portD = 0x08;
+  var fwdSpeed = -50;
+  var bwdSpeed = -fwdSpeed;
 
+  function onOpen(evt) {
+    console.log('connection ready', evt);
+  }
+
+  function onMessage(data) {
+    console.log(data);
+  }
+
+  function onAction(evt) {
+    console.log(evt);
+    if (evt.type == 'click') {
+      var id = evt.target.id;
+      if (id == "straight") {
+        sendMessage({
+          actions: [['set_motor_power', portA + portD, fwdSpeed]]
+        });
+      }
+      else if (id == "left") {
+        sendMessage({
+          actions: [
+            ['set_motor_power', portA, bwdSpeed],
+            ['set_motor_power', portD, fwdSpeed]
+          ]
+        });
+      }
+      else if (id == "right") {
+        sendMessage({
+          actions: [
+            ['set_motor_power', portA, fwdSpeed],
+            ['set_motor_power', portD, bwdSpeed]
+          ]
+        });
+      }
+      else if (id == "stop") {
+        sendMessage({
+          actions: [['set_motor_power', portA + portD, 0]]
+        });
+      }
+    }
+  }
 
 </script>
 
