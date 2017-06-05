@@ -1,0 +1,23 @@
+{% extends "layout.html" %} 
+
+{% block body %}
+
+<div id="attack" class="kgc-content-box mdl-cell mdl-cell--12-col">
+Scenario: If robogator senses something less than 2 feet away, it will move towards it. If it senses it less than 1 foot away it will stop moving towards it, and start snapping its jaws. 
+<br/>
+Sensor: Ultrasonic sensor
+
+<br/>
+Motor: Jaw and leg motors.
+
+<br/>
+Code: block
+
+<br/>
+<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+  Run Proximity
+</button>
+
+</div>
+
+{% endblock %}

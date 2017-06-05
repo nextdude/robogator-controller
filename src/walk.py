@@ -19,43 +19,55 @@ import brickpi3 # import the BrickPi3 drivers
 
 BP = brickpi3.BrickPi3() # Create an instance of the BrickPi3 class. BP will be the BrickPi3 object.
 
+left_touch = BP.PORT_1
+right_touch = BP.PORT_2
 
-sensorPort = BP.PORT_2
-sensorPortName = "port 2"
+left_leg = BP.PORT_A
+right_leg = BP.PORT_D
+BP.set_motor_power(left_leg + right_leg, 0)
 
-motors = BP_PORT_A + BP_PORT_D
-BP.set_motor_power(motors, 0)
+normal_speed = -50
+faster_speed = -normal_speed
 
-base_speed = -50
-
-BP.set_sensor_type(sensorPort, BP.SENSOR_TYPE.TOUCH)
+BP.set_sensor_type(left_touch, BP.SENSOR_TYPE.TOUCH)
+BP.set_sensor_type(right_touch, BP.SENSOR_TYPE.TOUCH)
 
 try:
-    print("Press touch sensor on %s to run motors" % sensorPortName)
-    value = 0
-    while not value:
+    print("Press touch sensors to start")
+    left_click = 0
+    right_click = 0
+    while not left_click + right_click:
         try:
-            value = BP.get_sensor(sensorPort)
+            left_click = BP.get_sensor(left_touch)
+            right_click = BP.get_sensor(right_touch)
         except brickpi3.SensorError:
             pass
     
     speed = 0
     while True:
-        # BP.get_sensor retrieves a sensor value.
-        # BP.PORT_1 specifies that we are looking for the value of sensor port 1.
-        # BP.get_sensor returns the sensor value.
         try:
-            value = BP.get_sensor(sensorPort)
+            left_click = BP.get_sensor(left_touch)
+            right_click = BP.get_sensor(right_touch)
         except brickpi3.SensorError as error:
             print(error)
-            value = 0
+            left_click = 0
+            right_click = 0
         
-        if value:                             # if the touch sensor is pressed
-            speed = base_speed 
-        else:                                 # else the touch sensor is not pressed or not configured, so set the speed to 0
-            speed = 0
+        if left_click and right_click:
+            left_speed = normal_speed
+            right_speed = normal_speed
+        elif left_click and not right_click:
+            left_speed = faster_speed
+            right_speed = normal_speed
+        elif right_click and not left_click:
+            left_speed = normal_speed
+            right_speed = faster_speed
+        else:
+            left_speed = 0
+            right_speed = 0
         
-        BP.set_motor_power(motors, speed)
+        BP.set_motor_power(left_leg, left_speed)
+        BP.set_motor_power(right_leg, right_speed)
         
         try:
             # Each of the following BP.get_motor_encoder functions returns the encoder value (what we want to display).
