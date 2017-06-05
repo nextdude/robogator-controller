@@ -20,7 +20,7 @@ import brickpi3 # import the BrickPi3 drivers
 BP = brickpi3.BrickPi3() # Create an instance of the BrickPi3 class. BP will be the BrickPi3 object.
 
 
-sonic_port = BP.PORT_1
+sonic_port = BP.PORT_4
 BP.set_sensor_type(sonic_port, BP.SENSOR_TYPE.NXT_ULTRASONIC)
 
 legs = BP.PORT_A + BP.PORT_D

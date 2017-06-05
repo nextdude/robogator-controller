@@ -101,7 +101,9 @@
         stopping = true;
         sendMessage({
           actions: [
-            ['reset_all']
+            ['set_sensor_type', sonicPort, 1],
+            ['set_motor_power', legs + jaws, 0],
+            ['sleep', 0.02]
           ]
         });
       }
