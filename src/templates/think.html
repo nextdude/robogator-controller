@@ -1,6 +1,6 @@
 {% extends "layout.html" %} {% block body %}
 
-<div id="think" class="kgc-content-box mdl-cell mdl-cell--12-col">
+<div id="think" class="kgc-scenario kgc-content-box mdl-cell mdl-cell--12-col">
   <div class="mdl-card">
     <div class="mdl-card__title">
       <h2 class="mdl-card__title-text">Make Robogator Think</h2>
@@ -15,10 +15,57 @@
       </ul>
     </div>
     <div class="mdl-card__actions">
-      <button id="think-start" class="kgc-action-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">Start</button>
-      <button id="think-stop" class="kgc-action-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">Stop</button>
+      <button id="spin" class="kgc-action-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">Start</button>
+      <button id="stop" class="kgc-action-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">Stop</button>
     </div>
   </div>
 </div>
+
+<script>
+
+  var currentDirection = "up";
+  var currentLevel = 0;
+
+  function onOpen(evt) {
+    console.log('connection ready', evt);
+  }
+
+  function onMessage(data) {
+    if (data.result.code == 0) {
+      var level = data.action[1];
+      if (currentDirection == "up") {
+        level = Math.max(level, currentLevel) + 1;
+        if (level > 100) {
+          level = 99;
+          currentDirection = "down";
+        }
+      }
+      else {
+        level = Math.min(level, currentLevel) - 1;
+        if (level < 0) {
+          level = 1;
+          currentDirection = "up";
+        }
+      }
+      sendMessage({
+        action: ['set_led', level]
+      });
+    }
+    else {
+      console.log(data.result);
+    }
+  }
+
+  function onAction(evt) {
+    if (evt.type == 'click') {
+      var id = evt.target.id;
+      if (id == "spin") {
+        sendMessage({
+          action: ['set_led', 0]
+        });
+      } 
+  }
+
+</script>
 
 {% endblock %}

@@ -15,29 +15,13 @@ import json
 BP = brickpi3.BrickPi3()
 app = Flask(__name__)
 sockets = Sockets(app)
-action_scenario = None
-
-def init_scenario(scenario):
-    err = None
-    active_scenario = scenario
-    return err
-
-def handle_think_action(req):
     
-def handle_scenario_action(req):
-    res = { "status": "ok" }
-    if req['action'] == 'stop':
-        BP.reset_all()
-        res['status'] = 'scenario-done'
-    elif req['action'] == 'start':
-        err = init_scenario(req['scenario'])
-        if err is not None:
-            res['status'] = "error"
-            res['error'] = err
-        else:
-            res['status'] = 'scenario-ready'
-    elif req['scenario'] == 'think':
-        res = handle_think_action(req)
+def handle_action(req):
+    res = { "action": req, "result": {"code": 0} }
+    action = req['action'].pop(0)
+    args = tuple(req['action'])
+    if action == 'set_led':
+        BP.set_led(args[0])
     return res
 
 @app.route("/")
@@ -49,7 +33,7 @@ def index():
 def gator(ws):
     while True:
         req = json.loads(ws.receive())
-        res = handle_scenario_action(req)
+        res = handle_action(req)
         ws.send(json.dumps(res))
 
 
@@ -57,6 +41,7 @@ def gator(ws):
 def show_section(section):
     if section not in ['home', 'think', 'walk', 'attack', 'color', 'jaws', 'help']:
         section = 'home'
+    BP.reset_all();
     return render_template('{}.html'.format(section), section=section)
 
 

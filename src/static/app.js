@@ -1,53 +1,55 @@
+(function(){
+  var socket, scenario, actions;
 
-(function() {
-  var socket, scenario, nextScenario;
-
-  function action(id) {
-    return JSON.stringify({scenario: scenario, action: id});
-  }
-
-  function onMessage(evt) {
+  function _incomingMessage(evt) {
     var data = JSON.parse(evt.data);
-    console.log(data);
-    switch (data.status) {
-      case 'scenario-ready':
-        break;
-      case 'scenario-done':
-        if (nextScenario) {
-          location.replace("/"+nextScenario);
-        }
-        break;
-    }
+    onMessage(data);
   }
 
-  function onOpen(evt) {
-    socket.send(action("start"))
-  }
-
-  function changeScenario(sc) {
-    nextScenario = sc;
-    socket.send(action("stop"));
-  }
-
-  function openConnection() {
+  function _openConnection() {
     socket = new WebSocket("ws://" + location.host + "/gator");
     socket.onopen = onOpen;
     socket.onmessage = onMessage;
   }
 
-  function onActionButtonClick(evt) {
-    socket.send(action(evt.target.id));
+  window.sendMessage = function(data) {
+    data.scenario = scenario;
+    socket.send(JSON.stringify(data));
   }
 
-  function init() {
+  window.connect = function () {
+    scenario = document.getElementsByClassName('kgc-scenario')[0].id;
     actions = document.getElementsByClassName('kgc-action-button');
-    for (var i = 0; i < actions.length; i++)
-      actions[i].onclick = onActionButtonClick;
-    if (actions.length > 0) {
-      scenario = actions[0].id.replace(/-.*$/,'');
-      openConnection();
+    if (actions.length > 0 && typeof onAction == 'function') {
+      for (var i = 0; i < actions.length; i++) {
+        _.forEach(['click','mousedown','mouseup','keydown','keyup',
+              'touchstart','touchend','touchcancel','touchmove'], function(etype){
+          actions[i].addEventListener(etype, onAction)
+        });
+      }
+      _openConnection();
     }
-  }
+  };
 
-  init();
+  window.disableActions = function() {
+    _.forEach(action, function(btn) {
+      btn.disabled = true;
+    });
+  };
+
+  window.enableActions = function() {
+    _.forEach(action, function(btn) {
+      btn.disabled = false;
+    });
+  };
+
+  window.toggleActions = function(onOff) {
+    _.forEach(action, function(btn) {
+      btn.disabled = !!onOff;
+    });
+  };
+
+
+  _init();
+
 })();
