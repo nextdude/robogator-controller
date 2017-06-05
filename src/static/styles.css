@@ -210,8 +210,13 @@ _:-ms-input-placeholder, :root .kgc-graph {
   font-size: 40px;
 }
 
-.kcg-content-box {
-  font-size: 200%;
+.kcg-content-box ul {
+  font-size: 1.5rem !important;
+}
+
+.mdl-card__action button {
+  font-size: 1.2rem;
+  margin-right: 1em;
 }
 
 #home {
