@@ -1,9 +1,74 @@
-{% extends "layout.html" %} 
+{% extends "layout.html" %} {% block body %} {% extends "layout.html" %} {% block body %}
 
-{% block body %}
-
-<div id="color" class="kgc-content-box mdl-cell mdl-cell--12-col">
-NIGHT/DAY
+<div id="color" class="kgc-scenario kgc-content-box mdl-cell mdl-cell--12-col">
+  <div class="mdl-card">
+    <div class="mdl-card__title">
+      <h2 class="mdl-card__title-text">Robogator Night/Day Movement</h2>
+    </div>
+    <div class="mdl-card__supporting-text">
+      <ul>
+        <li><strong>Scenario</strong>: When Robogator senses darkness he stops. When he senses light he moves.</li>
+        <li><strong>Motors</strong>: Both leg motors</li>
+        <li><strong>Sensors</strong>: Color sensor</li>
+        <li><strong>How We Do It</strong>: When </li>
+      </ul>
+    </div>
+    <div class="mdl-card__actions">
+      <button id="activate" class="mdl-button mdl-js-button mdl-button--raised">Activate Color Sensor</button>
+      <button id="deactive" class="mdl-button mdl-js-button mdl-button--raised">Deactivate Color Sensor</button>
+    </div>
+  </div>
 </div>
+
+<script>
+  var legs = 0x01 + 0x08;
+  var colorPort = 0x04;
+  var colorType = 12;
+  var walkSpeed = -50;
+  
+  function onOpen(evt) {
+    console.log('connection ready', evt);
+  }
+
+  function onMessage(data) {
+    console.log(data);
+    if (data.result.values.length > 0) {
+      var distance = data.result.values[0];
+      console.log('color', color);
+      var legSpeed = color == 'black' ? walkSpeed : 0;
+      sendMessage({
+        actions: [
+          ['set_motor_power', legs, legSpeed],
+          ['sleep', 0.02],
+          ['get_sensor', colorPort]
+        ]
+      });
+    }
+  }
+
+  function onAction(evt) {
+    console.log(evt);
+    if (evt.type == 'click') {
+      var id = evt.target.id;
+      if (id == "activate") {
+        sendMessage({
+          actions: [
+            ['set_sensor_type', colorPort, colorType],
+            ['sleep', 0.02],
+            ['get_sensor', colorPort]
+          ]
+        });
+      }
+      else if (id == "deactivate") {
+        sendMessage({
+          actions: [
+            ['bp_reset_all']
+          ]
+        });
+      }
+    }
+  }
+
+</script>
 
 {% endblock %}

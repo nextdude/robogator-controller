@@ -1,21 +1,98 @@
-{% extends "layout.html" %} 
-
-{% block body %}
+{% extends "layout.html" %} {% block body %} {% extends "layout.html" %} {% block body %}
 
 <div id="attack" class="kgc-scenario kgc-content-box mdl-cell mdl-cell--12-col">
-Scenario: If robogator senses something less than 2 feet away, it will move towards it. If it senses it less than 1 foot away it will stop moving towards it, and start snapping its jaws. 
-<br/>
-Sensor: Ultrasonic sensor
-
-<br/>
-Motor: Jaw and leg motors.
-
-<br/>
-Code: block
-
-<br/>
-<button id="start" class="mdl-button mdl-js-button mdl-button--raised">Run Proximity</button>
-
+  <div class="mdl-card">
+    <div class="mdl-card__title">
+      <h2 class="mdl-card__title-text">Make Robogator Walk</h2>
+    </div>
+    <div class="mdl-card__supporting-text">
+      <ul>
+        <li><strong>Scenario</strong>: <span style="color:red">Watch out! Robogator can be like a demon!</span> If robogator is on-guard and 
+          senses something less than 2 feet away, it will move towards it. If it senses it less than 1 foot away it will stop, and start snapping
+          its jaws.</li>
+        <li><strong>Motors</strong>: Both leg motors and the jaw motor</li>
+        <li><strong>Sensors</strong>: Ultrasonic</li>
+        <li><strong>How We Do It</strong>: When on-guard, we read the ultrasonic sensor, which gives distance to an object (in cm). 
+          If the distance is more than 62cm, we turn off all the motors.
+          If the distance is between 31cm and 62cm, we set the leg motors to move forward and the jaw motor off. 
+          If the distance is less than 31cm, we set the leg motors off and the jaw motors to toggle between a slower opening
+          and faster closing rate to give a real gator jaw snap feel. We keep rechecking the distance and repeating.</li>
+      </ul>
+    </div>
+    <div class="mdl-card__actions">
+      <button id="on-guard" class="mdl-button mdl-js-button mdl-button--raised">On Guard</button>
+      <button id="off-guard" class="mdl-button mdl-js-button mdl-button--raised">Off Guard</button>
+    </div>
+  </div>
 </div>
+
+<script>
+  var legs = 0x01 + 0x08;
+  var jaws = 0x02;
+  var sonicPort = 0x08;
+  var sonicType = 14;
+  var walkSpeed = -50;
+  var openSpeed = 20;
+  var closeSpeed = -50;
+  var jawTime = 0;
+
+  function onOpen(evt) {
+    console.log('connection ready', evt);
+  }
+
+  function onMessage(data) {
+    console.log(data);
+    if (data.result.values.length > 0) {
+      var distance = data.result.values[0];
+      console.log('distance', distance);
+      var legSpeed = 0;
+      var jawSpeed = 0;
+      if (distance < 62) {
+        if (distance > 31) {
+          legSpeed = walkSpeed;
+        }
+        else {
+          now = (new Date()).getTime();
+          if (now - jawTime > 500) {
+            jawSpeed = (jawSpeed < 0) ? openSpeed : closeSpeed;
+            jawTime = now;
+          }
+        }
+      }
+      sendMessage({
+        actions: [
+          ['set_motor_power', legs, legSpeed],
+          ['set_motor_power', jaws, jawSpeed],
+          ['sleep', 0.02],
+          ['get_sensor', sonicPort]
+        ]
+      });
+    }
+  }
+
+  function onAction(evt) {
+    console.log(evt);
+    if (evt.type == 'click') {
+      var id = evt.target.id;
+      if (id == "on-guard") {
+        sendMessage({
+          actions: [
+            ['set_sensor_type', sonicPort, sonicType],
+            ['sleep', 0.02],
+            ['get_sensor', sonicPort]
+          ]
+        });
+      }
+      else if (id == "off-guard") {
+        sendMessage({
+          actions: [
+            ['bp_reset_all']
+          ]
+        });
+      }
+    }
+  }
+
+</script>
 
 {% endblock %}

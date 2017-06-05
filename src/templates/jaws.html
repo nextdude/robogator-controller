@@ -1,9 +1,73 @@
-{% extends "layout.html" %} 
+{% extends "layout.html" %} {% block body %} {% extends "layout.html" %} {% block body %}
 
-{% block body %}
-
-<div id="jaws" class="kgc-content-box mdl-cell mdl-cell--12-col">
-JAWS
+<div id="jaws" class="kgc-scenario kgc-content-box mdl-cell mdl-cell--12-col">
+  <div class="mdl-card">
+    <div class="mdl-card__title">
+      <h2 class="mdl-card__title-text">Make Robogator Walk</h2>
+    </div>
+    <div class="mdl-card__supporting-text">
+      <ul>
+        <li><strong>Scenario</strong>: We open and close the jaws of robogator. Gators have weaker muscles for opening their jaws
+          then they do for closing them. We take this biological fact into account.</li>
+        <li><strong>Motors</strong>: The jaw motor</li>
+        <li><strong>Sensors</strong>: No sensors</li>
+        <li><strong>How We Do It</strong>: We just set the jaw power rotation speed slower for opening than closing to simulate
+           how gator jaws work.</li>
+      </ul>
+    </div>
+    <div class="mdl-card__actions">
+      <button id="open-jaws" class="mdl-button mdl-js-button mdl-button--raised">Open Jaws</button>
+      <button id="close-jaws" class="mdl-button mdl-js-button mdl-button--raised">Close Jaws</button>      
+    </div>
+  </div>
 </div>
+
+<script>
+  var jaws = 0x02;
+  var openSpeed = 20;
+  var closeSpeed = -50;
+  var timer = 0;
+
+  function onOpen(evt) {
+    console.log('connection ready', evt);
+  }
+
+  function onMessage(data) {
+    console.log(data);
+  }
+
+  function onAction(evt) {
+    console.log(evt);
+    if (evt.type == 'click') {
+      if (timer) clearTimeout(timer);
+      var id = evt.target.id;
+      if (id == "open-jaws") {
+        sendMessage({
+          actions: [
+            ['set_motor_power', jaws, openSpeed]
+            ['sleep', 0.02]
+          ]
+        });
+      }
+      else if (id == "close-jaws") {
+        sendMessage({
+          actions: [
+            ['set_motor_power', jaws, closeSpeed]
+            ['sleep', 0.02]
+          ]
+        });
+      }
+      timer = setTimeout(function(){
+        sendMessage({
+          actions: [
+            ['set_motor_power', jaws, 0],
+            ['sleep', 0.02]
+          ]
+        })
+      }, 100);
+    }
+  }
+
+</script>
 
 {% endblock %}
