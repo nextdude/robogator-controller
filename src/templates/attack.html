@@ -76,6 +76,7 @@
       legSpeed = 0;
       jawSpeed = 0;
       jawTime = 0;
+      stopping = false;
     }
   }
 
@@ -96,7 +97,7 @@
         stopping = true;
         sendMessage({
           actions: [
-            ['bp_reset_all']
+            ['reset_all']
           ]
         });
       }
