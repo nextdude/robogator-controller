@@ -22,7 +22,6 @@
 </div>
 
 <script>
-
   var currentDirection = "up";
   var currentLevel = 0;
 
@@ -33,25 +32,27 @@
   function onMessage(data) {
     if (data.result.code == 0) {
       var level = data.action[1];
-      if (currentDirection == "up") {
-        level = Math.max(level, currentLevel) + 1;
-        if (level > 100) {
-          level = 99;
-          currentDirection = "down";
+      if (level > -1) {
+        if (currentDirection == "up") {
+          level = Math.max(level, currentLevel) + 1;
+          if (level > 100) {
+            level = 99;
+            currentDirection = "down";
+          }
         }
-      }
-      else {
-        level = Math.min(level, currentLevel) - 1;
-        if (level < 0) {
-          level = 1;
-          currentDirection = "up";
+        else {
+          level = Math.min(level, currentLevel) - 1;
+          if (level < 0) {
+            level = 1;
+            currentDirection = "up";
+          }
         }
+        currentLevel = level;
+        console.log('set_led', currentLevel);
+        sendMessage({
+          action: ['set_led', currentLevel]
+        });
       }
-      currentLevel = level;
-      console.log('set_led', currentLevel);
-      sendMessage({
-        action: ['set_led', currentLevel]
-      });
     }
     else {
       console.log(data.result);
@@ -66,7 +67,14 @@
         sendMessage({
           action: ['set_led', 0]
         });
-      } 
+      }
+      else if (id == "stop") {
+        sendMessage({
+          action: ['set_led', -1]
+        });
+        currentLevel = 0;
+        currentDirection = "up";
+      }
     }
   }
 
