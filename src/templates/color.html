@@ -10,7 +10,9 @@
         <li><strong>Scenario</strong>: When Robogator senses darkness he stops. When he senses light he moves.</li>
         <li><strong>Motors</strong>: Both leg motors</li>
         <li><strong>Sensors</strong>: Color sensor</li>
-        <li><strong>How We Do It</strong>: Robogator's color sensor can detect black, white, blue, green, yellow and red colors.</li>
+        <li><strong>How We Do It</strong>: Robogator's color sensor can detect black, white, blue, green, yellow and red colors. When the sensor is activated, we constantly read the color it "sees" and interpret
+        white as "day" and anything else as "night". If we see "day" we start moving the legs. Otherwise, 
+        we stop the leg motors.</li>
       </ul>
       <div id="kgc-result">inactive</div>
     </div>
