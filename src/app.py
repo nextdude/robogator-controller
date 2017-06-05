@@ -17,11 +17,12 @@ app = Flask(__name__)
 sockets = Sockets(app)
     
 def handle_action(req):
-    res = { "action": req, "result": {"code": 0} }
-    action = req['action'].pop(0)
-    args = tuple(req['action'])
+    res = { "action": req['action'], "result": {"code": 0} }
+    action = req['action'][0]
+    args = req['action'][1:]
     if action == 'set_led':
         BP.set_led(args[0])
+        time.sleep(0.01)
     return res
 
 @app.route("/")

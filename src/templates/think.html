@@ -15,8 +15,8 @@
       </ul>
     </div>
     <div class="mdl-card__actions">
-      <button id="spin" class="kgc-action-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">Start</button>
-      <button id="stop" class="kgc-action-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">Stop</button>
+      <button id="spin" class="kgc-action-button mdl-button mdl-js-button mdl-button--raised">Start</button>
+      <button id="stop" class="kgc-action-button mdl-button mdl-js-button mdl-button--raised">Stop</button>
     </div>
   </div>
 </div>
@@ -47,8 +47,10 @@
           currentDirection = "up";
         }
       }
+      currentLevel = level;
+      console.log('set_led', currentLevel);
       sendMessage({
-        action: ['set_led', level]
+        action: ['set_led', currentLevel]
       });
     }
     else {
@@ -57,6 +59,7 @@
   }
 
   function onAction(evt) {
+    console.log(evt);
     if (evt.type == 'click') {
       var id = evt.target.id;
       if (id == "spin") {
@@ -64,6 +67,7 @@
           action: ['set_led', 0]
         });
       } 
+    }
   }
 
 </script>

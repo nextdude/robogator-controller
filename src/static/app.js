@@ -9,17 +9,18 @@
   function _openConnection() {
     socket = new WebSocket("ws://" + location.host + "/gator");
     socket.onopen = onOpen;
-    socket.onmessage = onMessage;
+    socket.onmessage = _incomingMessage;
   }
 
   window.sendMessage = function(data) {
     data.scenario = scenario;
+    console.log('sending',data);
     socket.send(JSON.stringify(data));
   }
 
-  window.connect = function () {
+  function _init() {
     scenario = document.getElementsByClassName('kgc-scenario')[0].id;
-    actions = document.getElementsByClassName('kgc-action-button');
+    actions = document.getElementsByTagName('button');
     if (actions.length > 0 && typeof onAction == 'function') {
       for (var i = 0; i < actions.length; i++) {
         _.forEach(['click','mousedown','mouseup','keydown','keyup',
